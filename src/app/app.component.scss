@@ -1,0 +1,125 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background: linear-gradient(to right, #00a000, #007a00, #005500, #003800);
+  display: flex;
+  justify-content: space-between; /* Distribuye los elementos */
+  align-items: center; /* Alinea verticalmente los elementos */
+  padding: 0 16px; /* Espaciado horizontal */
+}
+
+.toolbar-title {
+  font-size: 24px; /* Ajusta el tamaño */
+}
+
+mat-sidenav-container {
+  height: calc(205vh - 112vh);
+}
+
+mat-sidenav-content {
+  background-color: #ffffff; /* Fondo blanco */
+}
+
+mat-sidenav {
+  z-index: 1000 !important; /* Debe ser menor que el modal-backdrop */
+}
+
+.mat-drawer.mat-drawer-side {
+  z-index: 1!important;
+}
+
+.mat-drawer-content {
+  z-index: auto!important;
+}
+
+.mat-drawer-container {
+  z-index: auto!important;
+}
+
+
+.active-item {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  font-weight: bold;
+}
+
+.custom-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 230px; /* Ajusta el ancho según el diseño deseado */
+  background-color: #f5f5f5;
+}
+
+.custom-list li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s;
+}
+
+.custom-list li:hover {
+  background-color: rgba(0, 128, 0, 0.1); /* Hover */
+}
+
+.custom-list li.active {
+  background-color: #4caf50; /* Fondo verde para ítem activo */
+  color: white; /* Texto blanco */
+}
+
+.custom-list li i {
+  margin-right: 10px;
+  font-size: 20px; /* Ajusta el tamaño del ícono */
+}
+
+.custom-list li span {
+  white-space: nowrap; /* Evita que el texto salte de línea */
+  overflow: hidden; /* Oculta texto que desborde */
+  text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+  flex-grow: 1; /* El texto ocupa todo el espacio disponible */
+}
+
+.custom-list li span {
+  max-width: calc(100% - 40px); /* Resta el espacio ocupado por el ícono */
+}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(207, 207, 207, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.mat-mdc-progress-spinner.mat-primary{
+  --mdc-circular-progress-active-indicator-color: #28ff2f; /* Cambia el color del spinner */
+}
+.custom-spinner {
+  width: 100px !important;  /* Cambia el tamaño */
+  height: 100px !important;
+}
+
+// GLOBAL: Asegura que los toasts de Toastr estén siempre por encima de cualquier modal o sidenav
+:root, body, html {
+  --toastr-z-index: 99999;
+}
+
+:root ::ng-deep .toast,
+:root ::ng-deep .ngx-toastr,
+body ::ng-deep .toast,
+body ::ng-deep .ngx-toastr {
+  z-index: var(--toastr-z-index) !important;
+  position: fixed !important;
+}

@@ -1,0 +1,61 @@
+<div class="home-dashboard p-3">
+  <h2 class="mb-4">Bienvenido, usuario</h2>
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card kpi-card">
+        <div class="card-body text-center">
+          <h5 class="card-title kpi-title">Total de Productos</h5>
+          <div class="kpi-value">{{ totalProductos }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card kpi-card">
+        <div class="card-body text-center">
+          <h5 class="card-title kpi-title">Pedidos Hoy</h5>
+          <div class="kpi-value">{{ pedidosHoy }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card kpi-card">
+        <div class="card-body text-center">
+          <h5 class="card-title kpi-title">Productos por Vencer</h5>
+          <div class="kpi-value text-warning">{{ productosPorVencer }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-success text-white">Alertas</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngFor="let alerta of alertas">{{ alerta }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-info text-white">Accesos Rápidos</div>
+        <div class="card-body d-flex flex-wrap gap-2">
+          <a routerLink="/productos" class="btn btn-outline-success flex-fill">Ingresar Productos</a>
+          <a routerLink="/pedidos" class="btn btn-outline-primary flex-fill">Gestionar Pedidos</a>
+          <a routerLink="/prediccion" class="btn btn-outline-warning flex-fill">Predecir Demanda</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-secondary text-white">Últimas Actividades</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngFor="let actividad of ultimasActividades">{{ actividad }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

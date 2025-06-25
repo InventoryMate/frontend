@@ -1,0 +1,79 @@
+<div class="auth-container">
+  <form class="auth-form" (ngSubmit)="onSubmit()">
+    <h2>Crear Cuenta</h2>
+
+    <!-- Campo: Nombre de la Tienda -->
+    <div class="mb-3">
+      <label for="storeName" class="form-label">Nombre de la Tienda</label>
+      <input
+        type="text"
+        id="storeName"
+        class="form-control"
+        [(ngModel)]="storeName"
+        name="storeName"
+        required
+      />
+    </div>
+
+    <!-- Campo: Nombre Completo -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre Completo</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        [(ngModel)]="name"
+        name="name"
+        required
+      />
+    </div>
+
+    <!-- Campo: Correo Electrónico -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+    </div>
+
+    <!-- Campo: Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+    </div>
+
+    <!-- Campo: Confirmar Contraseña -->
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        class="form-control"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        required
+      />
+    </div>
+
+    <!-- Botón para Registrarse -->
+    <button type="submit" class="btn btn-success w-100">Registrar</button>
+
+    <!-- Enlace para Redirigir al Login -->
+    <div class="mt-3 text-center">
+      <span>¿Ya tienes cuenta?</span>
+      <a (click)="onLogin()">Inicia Sesión</a>
+    </div>
+  </form>
+</div>

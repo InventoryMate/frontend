@@ -1,0 +1,39 @@
+<div class="p-3">
+  <div class="row pb-3">
+    <div class="col-md-12">
+      <!-- Botón para abrir el filtro -->
+
+      
+    </div>
+  </div>
+
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Orden</th>
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Precio Total</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of detalles?.orderDetails; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{ item.productName }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>S/ {{ item.subtotalPrice }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"></td> <!-- Espacios vacíos para mantener el diseño -->
+        <td><strong>Total:</strong></td>
+        <td><strong>S/ {{ detalles?.totalPrice }}</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+  <footer class="text-center p-3">
+    <button class="btn btn-secondary" style="margin-right: 20px;" [routerLink]="[routerBase]">Atras</button>
+  </footer>

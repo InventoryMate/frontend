@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// GLOBAL: Asegura que los toasts de Toastr estén siempre por encima de cualquier modal o sidenav
+:root, body, html {
+  --toastr-z-index: 99999;
+}
+
+:root ::ng-deep .toast,
+:root ::ng-deep .ngx-toastr,
+body ::ng-deep .toast,
+body ::ng-deep .ngx-toastr,
+html ::ng-deep .toast,
+html ::ng-deep .ngx-toastr {
+  z-index: 99999 !important;
+  position: fixed !important;
+  pointer-events: all !important;
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  color: #222 !important;
+}
+
+// Corrige posibles conflictos con Angular Material overlays
+.cdk-overlay-container, .cdk-global-overlay-wrapper {
+  z-index: 2000 !important;
+}
+
+// Si el toast está dentro de un overlay de Angular Material, fuerza su visibilidad
+.cdk-overlay-container .toast, .cdk-overlay-container .ngx-toastr {
+  z-index: 99999 !important;
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+}

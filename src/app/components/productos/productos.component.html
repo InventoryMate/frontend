@@ -1,0 +1,216 @@
+<div class="p-3">
+  <div class="row pb-3">
+    <div class="col-md-12" >
+      <!-- Botón para abrir el filtro -->
+      <button class="btn btn-primary m-2" (click)="toggleFilter()"><i class="fas fa-filter"></i> Filtros</button>
+
+
+      <button class="btn btn-warning text-white m-2" (click)="addCategoria()">
+        <i class="fas fa-plus"></i> Agregar Categoría
+      </button>
+      <button class="btn btn-success m-2" (click)="addPedido()">
+        <i class="fas fa-plus"></i> Agregar Producto
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Unidad</th>
+        <th>Categoria</th>
+        <th>Stock</th>
+        <th class="text-center">Detalle Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of dataSource; let i = index">
+        <td>{{ element?.productName }}</td>
+        <td>{{ element?.productDescription }}</td>
+        <td>S/ {{ element?.productPrice }}</td>
+        <td>{{ element?.unitType }}</td>
+        <td>{{ element.category?.categoryName || 'Sin categoría' }}</td>
+        <td>{{ element?.stock }}</td>
+        <td class="text-center">
+          <button class="btn btn-info" (click)="viewDetails(element.id)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="p-3">
+  <!-- Paginador -->
+  <nav *ngIf="totalPages > 1" aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="previousPage()">&laquo;</a>
+      </li>
+      <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()">&raquo;</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- Modal Lateral para Filtros -->
+<div class="filter-modal" [class.active]="isFilterOpen">
+  <div class="filter-header">
+    <h5>Filtros</h5>
+    <button class="close-btn" (click)="toggleFilter()">&times;</button>
+  </div>
+  <div class="filter-body">
+    <form>
+      <!-- Selección del campo a filtrar -->
+      <div class="mb-3">
+        <label for="filter-field" class="form-label">Filtrar por:</label>
+        <select id="filter-field" class="form-select" [(ngModel)]="selectedField" [ngModelOptions]="{standalone: true}"
+          (change)="onFieldSelect()">
+          <option value="">Seleccione un campo</option>
+          <option value="nombre">Nombre</option>
+          <option value="descripcion">Descripción</option>
+          <option value="precio">Precio</option>
+          <option value="unidad">Unidad</option>
+          <option value="categoria">Categoría</option>
+        </select>
+      </div>
+
+      <!-- Input dinámico según el campo seleccionado -->
+      <div *ngIf="selectedField === 'nombre'" class="mb-3">
+        <label for="filter-nombre" class="form-label">Nombre:</label>
+        <input type="text" id="filter-nombre" class="form-control" [(ngModel)]="filterValue"
+          [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <div *ngIf="selectedField === 'descripcion'" class="mb-3">
+        <label for="filter-descripcion" class="form-label">Descripción:</label>
+        <input type="text" id="filter-descripcion" class="form-control" [(ngModel)]="filterValue"
+          [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <div *ngIf="selectedField === 'precio'" class="mb-3">
+        <label for="filter-precio" class="form-label">Precio:</label>
+        <input type="text" id="filter-precio" class="form-control" [(ngModel)]="filterValue"
+          [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <div *ngIf="selectedField === 'unidad'" class="mb-3">
+        <label for="filter-unidad" class="form-label">Unidad:</label>
+        <input type="text" id="filter-unidad" class="form-control" [(ngModel)]="filterValue"
+          [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <div *ngIf="selectedField === 'categoria'" class="mb-3">
+        <label for="filter-categoria" class="form-label">Categoría:</label>
+        <select id="filter-categoria" class="form-select" [(ngModel)]="selectedCategory"
+          [ngModelOptions]="{standalone: true}">
+          <option value="">Todas</option>
+          <option *ngFor="let category of categories" [value]="category.categoryName">{{ category.categoryName }}</option>
+        </select>
+      </div>
+
+      <!-- Botón para aplicar los filtros -->
+      <button type="button" class="btn btn-primary w-100" (click)="applyFilters()">Aplicar Filtros</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<div *ngIf="toggleAddModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nuevo Producto</h5>
+        <button class="btn-close ms-auto" aria-label="Close" (click)="toggleAddModal = false;">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" name="nombre" formControlName="productName" required>
+          </div>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <input type="text" id="descripcion" class="form-control" name="descripcion"
+              formControlName="productDescription" required>
+          </div>
+          <div class="mb-3">
+            <label for="precio" class="form-label">Precio</label>
+            <input type="text" id="precio" class="form-control" name="precio" formControlName="productPrice" required>
+          </div>
+          <div class="mb-3">
+            <label for="unidad" class="form-label">Unidad</label>
+            <select id="unidad" class="form-select" name="unidad" formControlName="unitType" required>
+              <option value="" disabled selected>Seleccione una unidad</option>
+              <option value="UNIT">Unidad</option>
+              <option value="KG">Kilogramo</option>
+              <option value="KG">Gramo</option>
+              <option value="L">Litro</option>
+              <option value="ML">Mililitro</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="Categoria" class="form-label">Categoría</label>
+            <select id="Categoria" class="form-select" name="Categoria" formControlName="categoryId" required>
+              <option value="" disabled selected>Seleccione una categoría</option>
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.categoryName }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="productoExpirable" class="form-label">Expirable</label>
+            <select id="productoExpirable" class="form-select" name="productoExpirable" formControlName="expirable"
+              required>
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value=true>Si</option>
+              <option value=false>No</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-success w-100" (click)="submit()">
+            Guardar Producto
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="toggleAddModalCategoria" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nuevo Categoria</h5>
+        <button class="btn-close ms-auto" aria-label="Close" (click)="toggleAddModalCategoria = false;">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="formCategoria">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Categoría</label>
+            <input type="text" id="nombre" class="form-control" name="nombre" formControlName="categoryName" required>
+          </div>
+          <button type="button" class="btn btn-success w-100" (click)="submitCategoria()">
+            Guardar Categoria
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

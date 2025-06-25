@@ -1,0 +1,67 @@
+/* Contenedor principal para el contenido */
+
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 10px 0;
+  font-size: 16px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.07);
+}
+
+.custom-table thead tr {
+  background-color: #4caf50;
+}
+
+.custom-table th {
+  color: #fff;
+  font-weight: 600;
+  padding: 14px 16px;
+  border-bottom: 2px solid #43a047;
+  text-align: left;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+}
+
+.custom-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+  background: #fff;
+}
+
+.custom-table tbody tr:nth-child(even) td {
+  background: #f6faf7;
+}
+
+.custom-table tbody tr:hover td {
+  background: #e8f5e9;
+  transition: background 0.2s;
+}
+
+.custom-table th:first-child,
+.custom-table td:first-child {
+  border-top-left-radius: 14px;
+}
+.custom-table th:last-child,
+.custom-table td:last-child {
+  border-top-right-radius: 14px;
+}
+
+.content {
+  flex: 1;
+  min-height: calc(100vh - 60px); /* Ajusta 60px según la altura de tu footer */
+  padding-bottom: 60px; /* Añade padding equivalente a la altura del footer */
+}
+
+.footer-container {
+
+  width: 100%;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  vertical-align: middle;
+  padding: 16px;
+}

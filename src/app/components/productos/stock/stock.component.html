@@ -1,0 +1,78 @@
+<div class="p-3">
+  <div class="row pb-3">
+    <div class="col-md-12" >
+      <!-- Botón para abrir el filtro -->
+
+
+      <button class="btn btn-warning text-white m-2" (click)="addStock()">
+        <i class="fas fa-plus"></i> Agregar Stock
+      </button>
+
+    </div>
+  </div>
+  <!-- Tabla -->
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Fecha de expiracion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of dataSource">
+        <td>{{ element.quantity }}</td>
+        <td>{{ element.expirationDate | date:'dd/MM/yyyy'  }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="p-3">
+  <!-- Paginador -->
+  <nav *ngIf="totalPages > 1" aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="previousPage()">&laquo;</a>
+      </li>
+      <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()">&raquo;</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<footer class="text-center p-3">
+  <button class="btn btn-secondary" (click)="atras()">Atras</button>
+</footer>
+
+
+<div *ngIf="toggleAddModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nuevo Stock</h5>
+        <button class="btn-close ms-auto" aria-label="Close" (click)="toggleAddModal = false;">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad</label>
+            <input type="number" id="cantidad" class="form-control" name="cantidad" formControlName="quantity" required>
+          </div>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Fecha de Expiración</label>
+            <input type="date" id="date" class="form-control" name="date" formControlName="expirationDate" required>
+          </div>
+          <button type="button" class="btn btn-success w-100" (click)="submit()">
+            Agregar Stock
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

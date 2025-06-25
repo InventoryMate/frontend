@@ -1,0 +1,15 @@
+.chart-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.chart-responsive {
+  width: 600px;
+  margin: 0 auto;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}

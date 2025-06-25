@@ -1,0 +1,82 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda la ventana del navegador */
+  background-color: #f4f4f9; /* Fondo suave y neutral */
+  margin: 0;
+}
+
+.auth-form {
+  max-width: 400px;
+  width: 100%;
+  padding: 20px 30px;
+  background: #ffffff; /* Fondo blanco para contraste */
+  border-radius: 8px; /* Bordes redondeados para suavidad */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra ligera */
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #4caf50; /* Verde para destacar */
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.auth-form .form-label {
+  font-size: 0.9rem;
+  color: #333333; /* Texto oscuro para buen contraste */
+  margin-bottom: 5px;
+  display: block;
+}
+
+.auth-form .form-control {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #dcdcdc; /* Borde ligero */
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.auth-form .form-control:focus {
+  border-color: #4caf50; /* Cambio de color al foco */
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3); /* Efecto brillante */
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #4caf50; /* Verde llamativo */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #45a049; /* Fondo más oscuro al pasar el mouse */
+}
+
+.auth-form a {
+  display: block;
+  cursor: pointer; /* Cursor en modo click */
+  color: #4caf50; /* Color verde */
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.auth-form a:hover {
+  color: #388e3c; /* Verde más oscuro para hover */
+  text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+.auth-form span {
+  color: #666666; /* Texto suave */
+  font-size: 0.9rem;
+}

@@ -1,0 +1,117 @@
+<div class="p-3">
+  <div class="row pb-3">
+    <div class="col-md-12">
+      <!-- Botón para abrir el filtro -->
+      <button class="btn btn-primary m-2" (click)="toggleFilter()"><i class="fas fa-filter"></i> Filtros</button>
+      
+      <button class="btn btn-success m-2" (click)="addPedido()">
+        <i class="fas fa-plus"></i> Agregar Pedido
+      </button>
+      
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Numero</th>
+        <th>Fecha</th>
+        <th>Costo</th>
+        <th>Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of dataSource; let i = index">
+        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td>{{ element.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>S/ {{ element.totalPrice }}</td>
+        <td>
+          <button class="btn btn-info" (click)="viewDetails(element.id)">
+            <i class="fas fa-eye"></i>
+          </button>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="p-3">
+  <!-- Paginador -->
+  <nav *ngIf="totalPages > 1" aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="previousPage()">&laquo;</a>
+      </li>
+      <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+        <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="nextPage()">&raquo;</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- Modal Lateral para Filtros -->
+<div class="filter-modal" [class.active]="isFilterOpen">
+  <div class="filter-header">
+    <h5>Filtrar por Fecha</h5>
+    <button class="close-btn" (click)="toggleFilter()">&times;</button>
+  </div>
+  <div class="filter-body">
+    <form>
+      <div class="mb-3">
+        <label for="filter-date" class="form-label">Fecha:</label>
+        <input type="date" id="filter-date" class="form-control" [(ngModel)]="filterDate" [ngModelOptions]="{standalone: true}">
+      </div>
+      <button type="button" class="btn btn-primary w-100" (click)="applyFilters()">Aplicar Filtros</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="toggleAddModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nuevo Pedido</h5>
+        <button class="btn-close ms-auto" aria-label="Close" (click)="toggleAddModal = false">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div formArrayName="orderDetails">
+            <div *ngFor="let productoControl of getOrderDetails().controls; let i = index" [formGroupName]="i" class="pedido-producto-card">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="pedido-producto-titulo">Producto {{ i + 1 }}</span>
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(i)">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Producto</label>
+                <select class="form-select" formControlName="productId" (change)="onProductChange(i)" required>
+                  <option value="" disabled selected>Seleccione un producto</option>
+                  <option *ngFor="let producto of productos" [value]="producto.id">{{ producto.productName }}</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Cantidad</label>
+                <input type="number" class="form-control" formControlName="quantity" required>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary w-100 mt-2" (click)="addProduct()">
+            <i class="fas fa-plus"></i> Agregar Otro Producto
+          </button>
+          <button type="button" class="btn btn-success w-100 mt-3" (click)="submit(); toggleAddModal = false;">
+            Guardar Pedido
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

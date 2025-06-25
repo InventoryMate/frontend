@@ -1,0 +1,30 @@
+<div class="auth-container">
+  <form class="auth-form" (ngSubmit)="onSubmit()">
+    <h2>Iniciar Sesión</h2>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+    </div>
+    <button type="submit">Iniciar Sesión</button>
+    <a (click)="onForgotPassword()">¿Olvidaste tu contraseña?</a>
+    <a (click)="onRegister()">Regístrate</a>
+  </form>
+</div>
