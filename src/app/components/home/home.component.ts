@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
+import { Subscription } from 'rxjs';
 import { ProductosService } from '../productos/productos.service';
 import { PedidosService } from '../pedidos/pedidos.service';
 
@@ -16,14 +17,19 @@ import { PedidosService } from '../pedidos/pedidos.service';
     NgChartsModule
   ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  storeName: string = '';
   totalProductos: number = 0;
   pedidosHoy: number = 0;
   productosPorVencer: number = 0;
   productosBajoStock: any[] = [];
   alertas: string[] = [];
-  hoy = new Date();
   ultimasActividades: string[] = [];
+  gananciasHoy: number = 0;
+  gananciasSemana: number = 0;
+  gananciasMes: number = 0;
+
+  private pedidoSubscription!: Subscription;
 
   constructor(
     private http: HttpClient, 
@@ -32,7 +38,26 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.storeName = JSON.parse(user);
+    }
+    this.loadAllData();
+
+    this.pedidoSubscription = this.pedidosService.pedidoAgregado$.subscribe(() => {
+      this.loadAllData();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.pedidoSubscription) {
+      this.pedidoSubscription.unsubscribe();
+    }
+  }
+
+  loadAllData(): void {
     this.cargarKPIs();
+    this.cargarGanancias();
     this.cargarUltimasActividades();
   }
 
@@ -74,6 +99,35 @@ export class HomeComponent implements OnInit {
                fecha.getMonth() === hoy.getMonth() &&
                fecha.getDate() === hoy.getDate();
       }).length;
+    });
+  }
+
+  cargarGanancias() {
+    this.pedidosService.list().subscribe((pedidos: any[]) => {
+      if (!pedidos) return;
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const weekStart = new Date(today);
+      weekStart.setDate(weekStart.getDate() - today.getDay()); // Asume que la semana empieza en Domingo
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      this.gananciasHoy = pedidos
+        .filter(p => {
+          const orderDate = new Date(p.orderDate);
+          return orderDate.getFullYear() === today.getFullYear() &&
+                 orderDate.getMonth() === today.getMonth() &&
+                 orderDate.getDate() === today.getDate();
+        })
+        .reduce((acc, p) => acc + (p.totalPrice || 0), 0);
+
+      this.gananciasSemana = pedidos
+        .filter(p => new Date(p.orderDate) >= weekStart)
+        .reduce((acc, p) => acc + (p.totalPrice || 0), 0);
+
+      this.gananciasMes = pedidos
+        .filter(p => new Date(p.orderDate) >= monthStart)
+        .reduce((acc, p) => acc + (p.totalPrice || 0), 0);
     });
   }
 

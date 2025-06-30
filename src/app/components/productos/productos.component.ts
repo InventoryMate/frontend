@@ -27,6 +27,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProductosComponent implements OnInit {
 
+  showGuide: boolean = false;
+
   constructor(
     private router: Router,
     private productosService: ProductosService,
@@ -89,10 +91,6 @@ export class ProductosComponent implements OnInit {
     );
   }
   
-  
-  
-  
-
   categoriesList() {
     this.productosService.categorias().subscribe(
       (res) => {
@@ -116,6 +114,10 @@ export class ProductosComponent implements OnInit {
   }
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
+  }
+
+  toggleGuide() {
+    this.showGuide = !this.showGuide;
   }
 
   applyFilters() {

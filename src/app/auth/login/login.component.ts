@@ -24,6 +24,8 @@ export class LoginComponent {
       (response) => {
         console.log('Login exitoso', response);
         localStorage.setItem('authToken', response.token);
+        localStorage.setItem('user', JSON.stringify(response.storeName));
+        localStorage.setItem('storeId', response.id);
         this.router.navigate(['/home']);
       },
       (error) => {

@@ -40,6 +40,13 @@
   background: linear-gradient(90deg, #868f96 0%, #596164 100%) !important;
   color: #fff !important;
 }
+.card-header-custom {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+
+}
 .card {
   border-radius: 18px;
   box-shadow: 0 2px 12px rgba(60, 60, 60, 0.08);
@@ -48,7 +55,6 @@
 .list-group-item {
   border: none;
   border-bottom: 1px solid #f0f0f0;
-  font-size: 1.05rem;
 }
 .list-group-item:last-child {
   border-bottom: none;
@@ -56,6 +62,49 @@
 .btn {
   border-radius: 12px;
   font-weight: 500;
+  font-size: 1.1rem;
+}
+.btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
+}
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+}
+.btn-outline-info {
+  border-color: #17a2b8;
+  color: #17a2b8;
+}
+.btn-outline-info:hover {
+  background-color: #17a2b8;
+  color: white;
+}
+.btn-outline-warning {
+  border-color: #ffc107;
+  color: #ffc107;
+}
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: white;
+}
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+.ganancia-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.ganancia-valor {
+  font-weight: bold;
   font-size: 1.1rem;
 }
 @media (max-width: 768px) {

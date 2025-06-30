@@ -7,3 +7,25 @@
     </canvas>
   </div>
 </div>
+
+<div class="p-3">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="predictionDays" class="form-label">Días a predecir:</label>
+        <input type="number" id="predictionDays" class="form-control" [(ngModel)]="predictionDays" min="1">
+      </div>
+      <button class="btn btn-primary" (click)="predictDemand()">Predecir Demanda</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showPredictionChart" class="chart-scroll-container">
+  <div class="chart-responsive">
+    <canvas baseChart
+            [data]="predictionChartConfig"
+            [options]="predictionChartOptions"
+            chartType="bar">
+    </canvas>
+  </div>
+</div>

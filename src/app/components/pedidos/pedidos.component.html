@@ -7,6 +7,10 @@
       <button class="btn btn-success m-2" (click)="addPedido()">
         <i class="fas fa-plus"></i> Agregar Pedido
       </button>
+
+      <button class="btn btn-info m-2" (click)="toggleGuide()">
+        <i class="fas fa-question-circle"></i> Guía de Usuario
+      </button>
       
     </div>
   </div>
@@ -25,7 +29,7 @@
       <tr *ngFor="let element of dataSource; let i = index">
         <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
         <td>{{ element.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
-        <td>S/ {{ element.totalPrice }}</td>
+        <td>S/{{ element.totalPrice }}</td>
         <td>
           <button class="btn btn-info" (click)="viewDetails(element.id)">
             <i class="fas fa-eye"></i>
@@ -109,6 +113,28 @@
             Guardar Pedido
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showGuide" class="modal-backdrop">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Guía de Usuario</h5>
+        <button class="btn-close ms-auto" aria-label="Close" (click)="toggleGuide()">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h2><b>Bienvenido a la sección de Pedidos</b></h2>
+        <p>Aquí puedes gestionar todos los pedidos de tu inventario.</p>
+        <ul>
+          <li><strong>Filtros:</strong> Utiliza el botón de filtros para buscar pedidos por fecha.</li>
+          <li><strong>Agregar Pedido:</strong> Añade nuevos pedidos al inventario, especificando los productos y cantidades.</li>
+          <li><strong>Ver Detalles:</strong> Haz clic en el icono del ojo para ver el detalle de un pedido.</li>
+        </ul>
       </div>
     </div>
   </div>

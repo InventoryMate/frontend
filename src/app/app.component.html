@@ -8,7 +8,10 @@
   <button mat-icon-button (click)="opened=!opened" class="example-icon text-light" aria-label="Example icon-button with menu icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <span class="d-flex text-light align-items-start toolbar-title">InventoryMateLogo</span>
+  <span class="d-flex text-light align-items-center toolbar-title" style="margin-left: 1rem;">
+    <img src="assets/images/logo.png" alt="InventoryMate Logo" style="height: 40px; margin-right: 10px;">
+    <span style="font-size: 20px; font-weight: 500;">InventoryMate</span>
+  </span>
   <span class="example-spacer"></span>
   <button mat-icon-button (click)="logout()" class="example-icon text-light" aria-label="Example icon-button with share icon">
     <mat-icon>logout</mat-icon>

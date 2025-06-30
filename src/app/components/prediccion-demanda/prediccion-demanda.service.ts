@@ -18,4 +18,8 @@ export class PrediccionDemandaService {
     return this.http.post<any[]>(`${this.apiUrl}orders/weekly-sales`, {});
   }
 
+  predecirDemanda(storeId: number, predictionDays: number) {
+    return this.http.post<any>(`${this.apiUrl}predictions/predict?storeId=${storeId}&predictionDays=${predictionDays}`,{});
+  }
+
 }

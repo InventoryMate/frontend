@@ -26,6 +26,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './pedidos.component.scss',
 })
 export class PedidosComponent implements OnInit {
+  showGuide: boolean = false;
   constructor(private router: Router, private pedidosService: PedidosService, private toastr: ToastrService) {}
 
   displayedColumns: string[] = ['#', 'Fecha', 'Precio'];
@@ -90,6 +91,10 @@ export class PedidosComponent implements OnInit {
   this.selectedCategory = '';
 }
 
+  toggleGuide() {
+    this.showGuide = !this.showGuide;
+  }
+
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
@@ -148,7 +153,7 @@ export class PedidosComponent implements OnInit {
   
   createProductForm(): FormGroup {
     return new FormGroup({
-      productId: new FormControl(null, Validators.required),
+      productId: new FormControl('', Validators.required),
       quantity: new FormControl(null, Validators.required),
       unitType: new FormControl(null, Validators.required),
     });
@@ -200,6 +205,7 @@ onProductChange(index: number): void {
           this.list();
           this.isModalOpen = false;
           this.toggleAddModal = false;
+          this.initForm();
         },
         (err) => {
           this.toastr.error('Error al agregar el pedido', 'Error', { timeOut: 5000 });
