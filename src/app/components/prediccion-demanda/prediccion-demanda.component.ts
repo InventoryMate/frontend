@@ -77,7 +77,6 @@ export class PrediccionDemandaComponent {
 
   loadWeeklySalesChart(): void {
     this.prediccionDemandaService.historialVentas().subscribe((ventas) => {
-      // Cada producto será una serie (dataset)
       this.barChartConfig = {
         labels: this.barChartLabels,
         datasets: ventas.map((producto: any, idx: number) => ({
@@ -113,7 +112,7 @@ export class PrediccionDemandaComponent {
           datasets: predictions.map((producto: any, idx: number) => ({
             label: producto.product_id,
             data: producto.daily_predictions.map((p: any) => p.predicted_quantity),
-            backgroundColor: this.getColor(idx + 5), // Offset colors
+            backgroundColor: this.getColor(idx + 5),
             borderRadius: 6,
             maxBarThickness: 32
           }))
@@ -124,7 +123,6 @@ export class PrediccionDemandaComponent {
   }
 
   getColor(idx: number): string {
-    // Paleta simple, puedes mejorarla
     const colors = [
       '#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#EC407A', '#FF7043', '#26A69A', '#D4E157', '#8D6E63', '#789262'
     ];

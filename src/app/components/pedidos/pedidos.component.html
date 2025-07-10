@@ -29,7 +29,7 @@
       <tr *ngFor="let element of dataSource; let i = index">
         <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
         <td>{{ element.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
-        <td>S/{{ element.totalPrice }}</td>
+        <td>S/{{ element.totalPrice | number:'1.2-2'}}</td>
         <td>
           <button class="btn btn-info" (click)="viewDetails(element.id)">
             <i class="fas fa-eye"></i>

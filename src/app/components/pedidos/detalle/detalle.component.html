@@ -29,7 +29,7 @@
       <tr>
         <td colspan="2"></td> <!-- Espacios vacíos para mantener el diseño -->
         <td><strong>Total:</strong></td>
-        <td><strong>S/{{ detalles?.totalPrice }}</strong></td>
+        <td><strong>S/{{ detalles?.totalPrice | number:'1.2-2' }}</strong></td>
       </tr>
     </tfoot>
   </table>
