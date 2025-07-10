@@ -45,9 +45,9 @@ export class AppComponent {
 
   menuItems = [
     { name: 'Inicio', route: '/home', icon: 'home' },
-    { name: 'Ingresar Productos', route: '/productos', icon: 'box-open' },
-    { name: 'Gestionar Pedidos', route: '/pedidos', icon: 'cart-plus' },
-    { name: 'Predecir Demanda', route: '/prediccion', icon: 'chart-line' },
+    { name: 'Productos', route: '/productos', icon: 'box-open' },
+    { name: 'Pedidos', route: '/pedidos', icon: 'cart-plus' },
+    { name: 'Predicción', route: '/prediccion', icon: 'chart-line' },
   ];
 
   // Método para hacer logout
