@@ -34,4 +34,20 @@ export class ProductosService {
     return this.http.post<any>(`${this.apiUrl}categories`, data);
   }
 
+  updateProducto(id: number, data: any) {
+    return this.http.put<any>(`${this.apiUrl}products/${id}`, data);
+  }
+
+  deleteProducto(id: number) {
+    return this.http.delete<any>(`${this.apiUrl}products/${id}`);
+  }
+
+  updateCategoria(id: number, data: any) {
+    return this.http.put<any>(`${this.apiUrl}categories/${id}`, data);
+  }
+
+  deleteCategoria(id: number) {
+    return this.http.delete<any>(`${this.apiUrl}categories/${id}`);
+  }
+
 }

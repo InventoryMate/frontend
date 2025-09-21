@@ -28,6 +28,9 @@ import { ToastrService } from 'ngx-toastr';
 export class ProductosComponent implements OnInit {
 
   showGuide: boolean = false;
+  isCategorySettingsOpen: boolean = false;
+  editingCategory: any = null;
+  editingProduct: any = null; // Para saber si estamos editando un producto
 
   constructor(
     private router: Router,
@@ -39,12 +42,12 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.list();
     this.categoriesList();
+    this.initFormCategoria();
+    this.initForm(); // Inicializar el formulario de producto
   }
   isModalOpen = false;
-  isModalOpenCategoria = false;
 
   toggleAddModal: boolean = false;
-  toggleAddModalCategoria: boolean = false;
   productId: number = 0;
   displayedColumns: string[] = [
     'position',
@@ -72,6 +75,79 @@ export class ProductosComponent implements OnInit {
   selectedField: string = ''; // Campo seleccionado (nombre, cantidad, etc.)
   filterValue: string = ''; // Valor del filtro para campos como nombre o precio
   selectedCategory: string = ''; // Categoría seleccionada
+
+  // --- Product Management Methods ---
+
+  editProduct(product: Productos) {
+    this.editingProduct = product;
+    this.form.patchValue({
+      productName: product.productName,
+      productDescription: product.productDescription,
+      productPrice: product.productPrice,
+      categoryId: product.category?.id,
+      unitType: product.unitType,
+      expirable: product.expirable.toString() // Asegurarse que el valor es string para el select
+    });
+    this.toggleAddModal = true;
+  }
+
+  deleteProduct(id: number) {
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+      this.productosService.deleteProducto(id).subscribe(
+        () => {
+          this.toastr.success('Producto eliminado correctamente', 'Éxito');
+          this.list(); // Recargar la lista de productos
+        },
+        (err) => {
+          this.toastr.error('Error al eliminar el producto.', 'Error');
+        }
+      );
+    }
+  }
+
+  // --- End of Product Management Methods ---
+
+  // --- Category Management Methods ---
+
+  openCategorySettings() {
+    this.isCategorySettingsOpen = true;
+    this.categoriesList(); // Refresh categories when opening
+    this.cancelEditCategory();
+  }
+
+  closeCategorySettings() {
+    this.isCategorySettingsOpen = false;
+    this.cancelEditCategory();
+  }
+
+  editCategory(category: any) {
+    this.editingCategory = category;
+    this.formCategoria.patchValue({
+      categoryName: category.categoryName
+    });
+  }
+
+  cancelEditCategory() {
+    this.editingCategory = null;
+    this.formCategoria.reset();
+  }
+
+  deleteCategory(id: number) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta categoría?')) {
+      this.productosService.deleteCategoria(id).subscribe(
+        () => {
+          this.toastr.success('Categoría eliminada correctamente', 'Éxito');
+          this.categoriesList(); // Refresh the list
+          this.list(); // Refresh products list in case some product's category is now null
+        },
+        (err) => {
+          this.toastr.error('Error al eliminar la categoría. Asegúrate de que no esté en uso.', 'Error');
+        }
+      );
+    }
+  }
+
+  // --- End of Category Management Methods ---
 
   list() {
     this.productosService.list().subscribe(
@@ -151,14 +227,6 @@ export class ProductosComponent implements OnInit {
     this.toggleFilter();
   }
 
-  // Lógica de agregar categoría (como antes)
-  addCategory() {
-    const newCategory = prompt('Ingrese el nombre de la nueva categoría:');
-    if (newCategory && !this.categories.includes(newCategory)) {
-      this.categories.push(newCategory);
-    }
-  }
-
   filterByCategory() {
     this.currentPage = 1;
 
@@ -169,15 +237,6 @@ export class ProductosComponent implements OnInit {
     this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
   }
 
-  // Agregar nueva categoría (simulación)
-  /*
-  addCategory() {
-    const newCategory = prompt('Ingrese el nombre de la nueva categoría:');
-    if (newCategory && !this.categories.includes(newCategory)) {
-      this.categories.push(newCategory);
-    }
-  }
-*/
   get pages(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
@@ -205,12 +264,12 @@ export class ProductosComponent implements OnInit {
   }
   initForm() {
     this.form = new FormGroup({
-      productName: new FormControl('',Validators.required),
-      productDescription: new FormControl('',Validators.required),
-      productPrice: new FormControl('',Validators.required),
-      categoryId: new FormControl('',Validators.required),
-      unitType: new FormControl('',Validators.required),
-      expirable: new FormControl('',Validators.required),
+      productName: new FormControl('', Validators.required),
+      productDescription: new FormControl('', Validators.required),
+      productPrice: new FormControl('', Validators.required),
+      categoryId: new FormControl('', Validators.required),
+      unitType: new FormControl('', Validators.required),
+      expirable: new FormControl('', Validators.required),
     });
   }
 
@@ -221,30 +280,39 @@ export class ProductosComponent implements OnInit {
   }
 
   addPedido() {
-    this.isModalOpen = true;
+    this.editingProduct = null; // Salir del modo edición
+    this.form.reset(); // Limpiar el formulario
     this.toggleAddModal = true;
-    this.initForm();
-  }
-
-  addCategoria(){
-    this.isModalOpenCategoria = true;
-    this.toggleAddModalCategoria = true;
-    this.initFormCategoria();
   }
 
   submit() {
     if (this.form.valid) {
-      this.productosService.postProducto(this.form.value).subscribe(
-        (res) => {
-          this.toastr.success('Producto agregado correctamente', 'Éxito');
-          this.list();
-          this.isModalOpen = false;
-          this.toggleAddModal = false;
-        },
-        (err) => {
-          this.toastr.error('Error al agregar el producto', 'Error');
-        }
-      );
+      if (this.editingProduct) {
+        // --- Lógica para ACTUALIZAR ---
+        this.productosService.updateProducto(this.editingProduct.id, this.form.value).subscribe(
+          () => {
+            this.toastr.success('Producto actualizado correctamente', 'Éxito');
+            this.list();
+            this.toggleAddModal = false;
+            this.editingProduct = null;
+          },
+          (err) => {
+            this.toastr.error('Error al actualizar el producto', 'Error');
+          }
+        );
+      } else {
+        // --- Lógica para CREAR ---
+        this.productosService.postProducto(this.form.value).subscribe(
+          () => {
+            this.toastr.success('Producto agregado correctamente', 'Éxito');
+            this.list();
+            this.toggleAddModal = false;
+          },
+          (err) => {
+            this.toastr.error('Error al agregar el producto', 'Error');
+          }
+        );
+      }
     } else {
       this.toastr.error('Formulario inválido', 'Error');
     }
@@ -252,25 +320,38 @@ export class ProductosComponent implements OnInit {
 
   submitCategoria() {
     if (this.formCategoria.valid) {
-      this.productosService.postCategoria(this.formCategoria.value).subscribe(
-        (res) => {
-          this.isModalOpenCategoria = false;
-          this.toggleAddModalCategoria = false;
-          setTimeout(() => {
-            this.toastr.success('Categoría agregada correctamente', 'Éxito', { timeOut: 5000 });
-          }, 300);
-          this.categoriesList();
-        },
-        (err) => {
-          this.toastr.error('Error al agregar la categoría', 'Error', { timeOut: 5000 });
-        }
-      );
+      const categoryData = this.formCategoria.value;
+
+      if (this.editingCategory) {
+        // Update existing category
+        this.productosService.updateCategoria(this.editingCategory.id, categoryData).subscribe(
+          () => {
+            this.toastr.success('Categoría actualizada correctamente', 'Éxito');
+            this.categoriesList();
+            this.list(); // Refresh products as well
+            this.cancelEditCategory();
+          },
+          (err) => {
+            this.toastr.error('Error al actualizar la categoría', 'Error');
+          }
+        );
+      } else {
+        // Create new category
+        this.productosService.postCategoria(categoryData).subscribe(
+          () => {
+            this.toastr.success('Categoría agregada correctamente', 'Éxito');
+            this.categoriesList();
+            this.formCategoria.reset();
+          },
+          (err) => {
+            this.toastr.error('Error al agregar la categoría', 'Error');
+          }
+        );
+      }
     } else {
-      this.toastr.error('Formulario inválido', 'Error', { timeOut: 5000 });
+      this.toastr.error('El nombre de la categoría no puede estar vacío', 'Error');
     }
   }
-
-
 }
 
 export interface Productos {
