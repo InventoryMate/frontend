@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8081/api/InventoryMate/v1/'
+  apiUrl: 'https://backend-production-5e40.up.railway.app/api/InventoryMate/v1/'
 };
