@@ -50,4 +50,11 @@ export class ProductosService {
     return this.http.delete<any>(`${this.apiUrl}categories/${id}`);
   }
 
+  unidades() {
+    return this.http.get<any>(`${this.apiUrl}products/filter/units`);
+  }
+
+  categoriaRegistradas() {
+    return this.http.get<any>(`${this.apiUrl}products/filter/categories`);
+  }
 }

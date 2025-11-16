@@ -32,6 +32,7 @@ export class ProductosComponent implements OnInit {
   editingCategory: any = null;
   editingProduct: any = null;
 
+
   constructor(
     private router: Router,
     private productosService: ProductosService,
@@ -42,6 +43,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.list();
     this.categoriesList();
+    this.loadAvailableFilters();
     this.initFormCategoria();
     this.initForm();
   }
@@ -49,6 +51,8 @@ export class ProductosComponent implements OnInit {
 
   toggleAddModal: boolean = false;
   productId: number = 0;
+  unidadesDisponibles: string[] = [];
+  categoriasDisponibles: any[] = [];
   displayedColumns: string[] = [
     'position',
     'nombre',
@@ -157,6 +161,26 @@ export class ProductosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al obtener los datos', error);
+      }
+    );
+  }
+
+  loadAvailableFilters() {
+    this.productosService.unidades().subscribe(
+      (res) => {
+        this.unidadesDisponibles = res;
+      },
+      (err) => {
+        console.error('Error al obtener las unidades para el filtro', err);
+      }
+    );
+
+    this.productosService.categoriaRegistradas().subscribe(
+      (res) => {
+        this.categoriasDisponibles = res;
+      },
+      (err) => {
+        console.error('Error al obtener las categorías para el filtro', err);
       }
     );
   }

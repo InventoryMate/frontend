@@ -53,7 +53,7 @@ export class StockComponent implements OnInit {
   initForm() {
     this.form = new FormGroup({
       quantity: new FormControl('', Validators.required),
-      expirationDate: new FormControl('', Validators.required),
+      expirationDate: new FormControl(''),
     });
   }
   addStock() {
@@ -81,8 +81,11 @@ export class StockComponent implements OnInit {
   selectedCategory: string = ''; 
 
   submit() {
-    if (this.form.valid) {
-      this.productosService.postStock(this.productId, this.form.value).subscribe(
+      const stockData = { ...this.form.value };
+      if (!stockData.expirationDate) {
+        stockData.expirationDate = null;
+      }
+      this.productosService.postStock(this.productId, stockData).subscribe(
         (res) => {
           this.toastr.success('Stock agregado correctamente', 'Éxito', { timeOut: 5000 });
           this.list();
@@ -93,9 +96,6 @@ export class StockComponent implements OnInit {
           this.toastr.error('Error al agregar el stock', 'Error', { timeOut: 5000 });
         }
       );
-    } else {
-      this.toastr.error('Formulario inválido', 'Error', { timeOut: 5000 });
-    }
   }
 
   list() {

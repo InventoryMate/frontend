@@ -129,11 +129,7 @@
         <label for="filter-unidad" class="form-label">Unidad:</label>
           <select id="filterValue" class="form-select" [(ngModel)]="filterValue" name="filterValue">
             <option value="" disabled selected>Seleccione una unidad</option>
-              <option value="UNIT">Unidad</option>
-              <option value="KG">Kilogramo</option>
-              <option value="G">Gramo</option>
-              <option value="L">Litro</option>
-              <option value="ML">Mililitro</option>
+            <option *ngFor="let unit of unidadesDisponibles" [value]="unit">{{ unit }}</option>
           </select>
       </div>
 
@@ -142,7 +138,7 @@
         <select id="filter-categoria" class="form-select" [(ngModel)]="selectedCategory"
           [ngModelOptions]="{standalone: true}">
           <option value="">Todas</option>
-          <option *ngFor="let category of categories" [value]="category.categoryName">{{ category.categoryName }}</option>
+          <option *ngFor="let category of categoriasDisponibles" [value]="category.name">{{ category.name }}</option>
         </select>
       </div>
 
