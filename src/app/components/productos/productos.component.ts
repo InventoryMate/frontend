@@ -74,7 +74,8 @@ export class ProductosComponent implements OnInit {
   selectedField: string = ''; 
   filterValue: string = ''; 
   selectedCategory: string = ''; 
-
+  priceGreaterThan: number | null = null;
+  priceLessThan: number | null = null;
 
   editProduct(product: Productos) {
     this.editingProduct = product;
@@ -179,6 +180,8 @@ export class ProductosComponent implements OnInit {
   onFieldSelect() {
     this.filterValue = '';
     this.selectedCategory = '';
+    this.priceGreaterThan = null;
+    this.priceLessThan = null;
   }
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
@@ -200,10 +203,13 @@ export class ProductosComponent implements OnInit {
       filtered = filtered.filter((item) =>
         item.productDescription?.toLowerCase().includes(this.filterValue.toLowerCase())
       );
-    } else if (this.selectedField === 'precio' && this.filterValue) {
-      filtered = filtered.filter((item) =>
-        item.productPrice?.toString().includes(this.filterValue)
-      );
+    } else if (this.selectedField === 'precio') {
+      if (this.priceGreaterThan !== null && this.priceGreaterThan !== undefined) {
+        filtered = filtered.filter(item => item.productPrice > this.priceGreaterThan!);
+      }
+      if (this.priceLessThan !== null && this.priceLessThan !== undefined) {
+        filtered = filtered.filter(item => item.productPrice < this.priceLessThan!);
+      }
     } else if (this.selectedField === 'unidad' && this.filterValue) {
       filtered = filtered.filter((item) =>
         item.unitType?.toLowerCase().includes(this.filterValue.toLowerCase())

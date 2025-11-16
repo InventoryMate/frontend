@@ -115,9 +115,14 @@
       </div>
 
       <div *ngIf="selectedField === 'precio'" class="mb-3">
-        <label for="filter-precio" class="form-label">Precio:</label>
-        <input type="text" id="filter-precio" class="form-control" [(ngModel)]="filterValue"
-          [ngModelOptions]="{standalone: true}">
+        <div class="mb-3">
+          <label for="filter-precio-mayor" class="form-label">Precio mayor a:</label>
+          <input type="number" id="filter-precio-mayor" class="form-control" [(ngModel)]="priceGreaterThan" [ngModelOptions]="{standalone: true}" placeholder="Ej: 10">
+        </div>
+        <div class="mb-3">
+          <label for="filter-precio-menor" class="form-label">Precio menor a:</label>
+          <input type="number" id="filter-precio-menor" class="form-control" [(ngModel)]="priceLessThan" [ngModelOptions]="{standalone: true}" placeholder="Ej: 50">
+        </div>
       </div>
 
       <div *ngIf="selectedField === 'unidad'" class="mb-3">
