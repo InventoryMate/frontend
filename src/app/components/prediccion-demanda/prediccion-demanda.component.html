@@ -1,34 +1,85 @@
-<div class="chart-scroll-container">
-  <div class="chart-responsive">
-    <canvas baseChart
-            [data]="barChartConfig"
-            [options]="barChartOptions"
-            chartType="bar">
-    </canvas>
+<div class="p-3">
+  <div class="row pb-3">
+    <div class="col-md-12">
+      <button class="btn btn-info m-2" (click)="toggleGuide()">
+        <i class="fas fa-question-circle"></i> Guía de Usuario
+      </button>
+    </div>
   </div>
 </div>
+<div *ngIf="hasProducts; else noProducts">
+  <div class="chart-scroll-container">
+    <div class="chart-responsive">
+      <canvas baseChart
+              [data]="barChartConfig"
+              [options]="barChartOptions"
+              chartType="bar">
+      </canvas>
+    </div>
+  </div>
 
-
-
-<div class="p-3">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-3">
-        <label for="predictionDays" class="form-label">Días a predecir:</label>
-        <input type="number" id="predictionDays" class="form-control" [(ngModel)]="predictionDays" min="1">
+  <div class="p-3">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="predictionDays" class="form-label">Días a predecir:</label>
+          <input type="number" id="predictionDays" class="form-control" [(ngModel)]="predictionDays" min="1">
+        </div>
+        <button class="btn btn-primary" (click)="predictDemand()">Predecir Demanda</button>
       </div>
-      <button class="btn btn-primary" (click)="predictDemand()">Predecir Demanda</button>
+    </div>
+  </div>
+
+  <div *ngIf="showPredictionChart" class="chart-scroll-container">
+    <div class="chart-responsive">
+      <canvas baseChart
+              [data]="predictionChartConfig"
+              [options]="predictionChartOptions"
+              chartType="bar">
+      </canvas>
     </div>
   </div>
 </div>
 
+<ng-template #noProducts>
+  <div class="text-center p-5">
+    <h4>No hay productos registrados</h4>
+    <p>Para utilizar la función de predicción de demanda, primero debe agregar productos a su inventario.</p>
+  </div>
+</ng-template>
 
-<div *ngIf="showPredictionChart" class="chart-scroll-container">
-  <div class="chart-responsive">
-    <canvas baseChart
-            [data]="predictionChartConfig"
-            [options]="predictionChartOptions"
-            chartType="bar">
-    </canvas>
+<div *ngIf="showGuide" class="modal-backdrop">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Guía de Usuario: Predicción de Demanda</h5>
+        <button type="button" class="btn-close" (click)="toggleGuide()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Esta sección te ayuda a visualizar las tendencias de ventas y a predecir la demanda futura de tus productos.</p>
+        
+        <h3>1. Gráfico de Ventas Semanales</h3>
+        <p>
+          El primer gráfico muestra un resumen de las ventas totales de todos tus productos durante la última semana. Te permite identificar rápidamente los días de mayor y menor actividad.
+        </p>
+
+        <h3>2. Predecir Demanda</h3>
+        <p>
+          Para generar una predicción, sigue estos pasos:
+        </p>
+        <ul>
+          <li><strong>Días a predecir:</strong> Ingresa el número de días hacia el futuro para los que deseas estimar la demanda.</li>
+          <li><strong>Botón "Predecir Demanda":</strong> Haz clic en este botón para generar el gráfico de predicción basado en el historial de ventas.</li>
+        </ul>
+
+        <h3>3. Gráfico de Predicción</h3>
+        <p>
+          Una vez generada, aparecerá un segundo gráfico mostrando la demanda estimada para los próximos días. Esto te puede ayudar a planificar tu inventario y a anticipar las necesidades de tus clientes.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="toggleGuide()">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartOptions } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import {PrediccionDemandaService} from './prediccion-demanda.service';
+import { ProductosService } from '../productos/productos.service'; // Servicio de productos importado
+
 @Component({
   selector: 'app-prediccion-demanda',
   templateUrl: './prediccion-demanda.component.html',
@@ -16,6 +18,7 @@ import {PrediccionDemandaService} from './prediccion-demanda.service';
   ]
 })
 export class PrediccionDemandaComponent {
+  showGuide: boolean = false; 
   storeId: number = 0;
   chartWrapperWidth = 600;
   barChartLabels: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -34,6 +37,8 @@ export class PrediccionDemandaComponent {
       }
     }
   };
+
+  hasProducts: boolean = false;
   barChartConfig: ChartConfiguration<'bar'>['data'] = {
     labels: this.barChartLabels,
     datasets: []
@@ -64,7 +69,9 @@ export class PrediccionDemandaComponent {
 
   constructor(
     private http: HttpClient, 
-    private prediccionDemandaService: PrediccionDemandaService
+    private prediccionDemandaService: PrediccionDemandaService,
+    private productosService: ProductosService
+
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +79,26 @@ export class PrediccionDemandaComponent {
     if (storeIdString) {
       this.storeId = Number(storeIdString);
     }
-    this.loadWeeklySalesChart();
+    this.checkIfProductsExist();
+  }
+
+  toggleGuide(): void { 
+    this.showGuide = !this.showGuide;
+  }
+
+  checkIfProductsExist(): void {
+    this.productosService.list().subscribe({
+      next: (products: any[]) => {
+        this.hasProducts = products && products.length > 0;
+        if (this.hasProducts) {
+          this.loadWeeklySalesChart();
+        }
+      },
+      error: (error) => {
+        console.error('Error al verificar la existencia de productos', error);
+        this.hasProducts = false;
+      }
+    });
   }
 
   loadWeeklySalesChart(): void {

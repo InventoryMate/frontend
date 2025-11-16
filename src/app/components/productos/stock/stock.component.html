@@ -1,16 +1,16 @@
 <div class="p-3">
   <div class="row pb-3">
     <div class="col-md-12" >
-      <!-- Botón para abrir el filtro -->
-
-
       <button class="btn btn-warning text-white m-2" (click)="addStock()">
         <i class="fas fa-plus"></i> Agregar Stock
       </button>
 
     </div>
   </div>
-  <!-- Tabla -->
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4 class="mb-0"><b>Total de Stock:</b> {{totalStockQuantity}}</h4>
+  </div>
   <table class="custom-table">
     <thead>
       <tr>
@@ -19,6 +19,11 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngIf="!dataSource || dataSource.length === 0">
+        <td colspan="5" class="text-center p-4">
+          No hay stock disponible para este producto.
+        </td>
+      </tr>
       <tr *ngFor="let element of dataSource">
         <td>{{ element.quantity }}</td>
         <td>{{ element.expirationDate | date:'dd/MM/yyyy'  }}</td>

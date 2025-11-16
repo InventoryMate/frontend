@@ -18,8 +18,10 @@
     </div>
   </div>
 
-  <!-- Tabla -->
-  <table class="custom-table">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4 class="mb-0"><b>Lista de Productos:</b> {{ filteredDataOriginal.length }} productos en total</h4>
+  </div>
+   <table class="custom-table">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -32,6 +34,11 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngIf="!dataSource || dataSource.length === 0">
+        <td colspan="7" class="text-center p-4">
+          No hay productos disponibles para visualizar.
+        </td>
+      </tr>
       <tr *ngFor="let element of dataSource; let i = index">
         <td>{{ element?.productName }}</td>
         <td>{{ element?.productDescription }}</td>
@@ -115,8 +122,14 @@
 
       <div *ngIf="selectedField === 'unidad'" class="mb-3">
         <label for="filter-unidad" class="form-label">Unidad:</label>
-        <input type="text" id="filter-unidad" class="form-control" [(ngModel)]="filterValue"
-          [ngModelOptions]="{standalone: true}">
+          <select id="filterValue" class="form-select" [(ngModel)]="filterValue" name="filterValue">
+            <option value="" disabled selected>Seleccione una unidad</option>
+              <option value="UNIT">Unidad</option>
+              <option value="KG">Kilogramo</option>
+              <option value="G">Gramo</option>
+              <option value="L">Litro</option>
+              <option value="ML">Mililitro</option>
+          </select>
       </div>
 
       <div *ngIf="selectedField === 'categoria'" class="mb-3">
@@ -169,7 +182,7 @@
               <option value="" disabled selected>Seleccione una unidad</option>
               <option value="UNIT">Unidad</option>
               <option value="KG">Kilogramo</option>
-              <option value="KG">Gramo</option>
+              <option value="G">Gramo</option>
               <option value="L">Litro</option>
               <option value="ML">Mililitro</option>
             </select>

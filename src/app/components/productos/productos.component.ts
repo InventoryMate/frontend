@@ -30,7 +30,7 @@ export class ProductosComponent implements OnInit {
   showGuide: boolean = false;
   isCategorySettingsOpen: boolean = false;
   editingCategory: any = null;
-  editingProduct: any = null; // Para saber si estamos editando un producto
+  editingProduct: any = null;
 
   constructor(
     private router: Router,
@@ -43,7 +43,7 @@ export class ProductosComponent implements OnInit {
     this.list();
     this.categoriesList();
     this.initFormCategoria();
-    this.initForm(); // Inicializar el formulario de producto
+    this.initForm();
   }
   isModalOpen = false;
 
@@ -63,20 +63,18 @@ export class ProductosComponent implements OnInit {
 
   @Output() modalStateChange = new EventEmitter<boolean>();
 
-  categories: any; // Inicializado como un arreglo vacío
-  filteredData: any[] = []; // Inicializado como un arreglo vacío
-  filteredDataOriginal: any[] = []; // Nueva propiedad para guardar los datos originales
+  categories: any; 
+  filteredData: any[] = []; 
+  filteredDataOriginal: any[] = []; 
   currentPage: number = 1;
   pageSize: number = 10;
-  totalPages: number = 0; // Inicializado como 0 y recalculado después
+  totalPages: number = 0; 
   isFilterOpen: boolean = false;
 
-  // Campos dinámicos
-  selectedField: string = ''; // Campo seleccionado (nombre, cantidad, etc.)
-  filterValue: string = ''; // Valor del filtro para campos como nombre o precio
-  selectedCategory: string = ''; // Categoría seleccionada
+  selectedField: string = ''; 
+  filterValue: string = ''; 
+  selectedCategory: string = ''; 
 
-  // --- Product Management Methods ---
 
   editProduct(product: Productos) {
     this.editingProduct = product;
@@ -86,7 +84,7 @@ export class ProductosComponent implements OnInit {
       productPrice: product.productPrice,
       categoryId: product.category?.id,
       unitType: product.unitType,
-      expirable: product.expirable.toString() // Asegurarse que el valor es string para el select
+      expirable: product.expirable.toString()
     });
     this.toggleAddModal = true;
   }
@@ -96,7 +94,7 @@ export class ProductosComponent implements OnInit {
       this.productosService.deleteProducto(id).subscribe(
         () => {
           this.toastr.success('Producto eliminado correctamente', 'Éxito');
-          this.list(); // Recargar la lista de productos
+          this.list(); 
         },
         (err) => {
           this.toastr.error('Error al eliminar el producto.', 'Error');
@@ -105,13 +103,9 @@ export class ProductosComponent implements OnInit {
     }
   }
 
-  // --- End of Product Management Methods ---
-
-  // --- Category Management Methods ---
-
   openCategorySettings() {
     this.isCategorySettingsOpen = true;
-    this.categoriesList(); // Refresh categories when opening
+    this.categoriesList();
     this.cancelEditCategory();
   }
 
@@ -137,8 +131,8 @@ export class ProductosComponent implements OnInit {
       this.productosService.deleteCategoria(id).subscribe(
         () => {
           this.toastr.success('Categoría eliminada correctamente', 'Éxito');
-          this.categoriesList(); // Refresh the list
-          this.list(); // Refresh products list in case some product's category is now null
+          this.categoriesList();
+          this.list();
         },
         (err) => {
           this.toastr.error('Error al eliminar la categoría. Asegúrate de que no esté en uso.', 'Error');
@@ -147,7 +141,6 @@ export class ProductosComponent implements OnInit {
     }
   }
 
-  // --- End of Category Management Methods ---
 
   list() {
     this.productosService.list().subscribe(
@@ -158,7 +151,7 @@ export class ProductosComponent implements OnInit {
             ? producto.stocks.reduce((acc: number, stock: { quantity: number }) => acc + (stock.quantity || 0), 0) 
             : 0
         }));
-        this.filteredDataOriginal = [...this.filteredData]; // Guardar copia original para filtros
+        this.filteredDataOriginal = [...this.filteredData];
         this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
       },
       (error) => {
@@ -170,7 +163,7 @@ export class ProductosComponent implements OnInit {
   categoriesList() {
     this.productosService.categorias().subscribe(
       (res) => {
-        this.categories = res; // Asignar las categorías desde la API
+        this.categories = res;
       },
       (err) => {
         console.error('Error al obtener las categorías', err);
@@ -184,7 +177,6 @@ export class ProductosComponent implements OnInit {
   }
 
   onFieldSelect() {
-    // Reinicia el valor del filtro al seleccionar un nuevo campo
     this.filterValue = '';
     this.selectedCategory = '';
   }
@@ -197,7 +189,7 @@ export class ProductosComponent implements OnInit {
   }
 
   applyFilters() {
-    this.currentPage = 1; // Reiniciar a la primera página
+    this.currentPage = 1;
     let filtered = this.filteredDataOriginal || this.filteredData;
 
     if (this.selectedField === 'nombre' && this.filterValue) {
@@ -231,7 +223,7 @@ export class ProductosComponent implements OnInit {
     this.currentPage = 1;
 
     if (this.selectedCategory === '') {
-      this.filteredData = [...this.filteredData]; // Mostrar todos los elementos
+      this.filteredData = [...this.filteredData];
     }
 
     this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
@@ -280,15 +272,14 @@ export class ProductosComponent implements OnInit {
   }
 
   addPedido() {
-    this.editingProduct = null; // Salir del modo edición
-    this.form.reset(); // Limpiar el formulario
+    this.editingProduct = null;
+    this.form.reset();
     this.toggleAddModal = true;
   }
 
   submit() {
     if (this.form.valid) {
       if (this.editingProduct) {
-        // --- Lógica para ACTUALIZAR ---
         this.productosService.updateProducto(this.editingProduct.id, this.form.value).subscribe(
           () => {
             this.toastr.success('Producto actualizado correctamente', 'Éxito');
@@ -301,7 +292,6 @@ export class ProductosComponent implements OnInit {
           }
         );
       } else {
-        // --- Lógica para CREAR ---
         this.productosService.postProducto(this.form.value).subscribe(
           () => {
             this.toastr.success('Producto agregado correctamente', 'Éxito');
@@ -323,12 +313,11 @@ export class ProductosComponent implements OnInit {
       const categoryData = this.formCategoria.value;
 
       if (this.editingCategory) {
-        // Update existing category
         this.productosService.updateCategoria(this.editingCategory.id, categoryData).subscribe(
           () => {
             this.toastr.success('Categoría actualizada correctamente', 'Éxito');
             this.categoriesList();
-            this.list(); // Refresh products as well
+            this.list();
             this.cancelEditCategory();
           },
           (err) => {
@@ -336,7 +325,6 @@ export class ProductosComponent implements OnInit {
           }
         );
       } else {
-        // Create new category
         this.productosService.postCategoria(categoryData).subscribe(
           () => {
             this.toastr.success('Categoría agregada correctamente', 'Éxito');

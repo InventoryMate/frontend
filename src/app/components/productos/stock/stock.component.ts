@@ -70,15 +70,15 @@ export class StockComponent implements OnInit {
   @Output() modalStateChange = new EventEmitter<boolean>();
 
   filteredData: any[] = [];
+  totalStockQuantity: number = 0; 
   currentPage: number = 1;
   pageSize: number = 10;
-  totalPages: number = 0; // Inicializado como 0 y recalculado después
+  totalPages: number = 0;
   isFilterOpen: boolean = false;
 
-  // Campos dinámicos
-  selectedField: string = ''; // Campo seleccionado (nombre, cantidad, etc.)
-  filterValue: string = ''; // Valor del filtro para campos como nombre o precio
-  selectedCategory: string = ''; // Categoría seleccionada
+  selectedField: string = ''; 
+  filterValue: string = ''; 
+  selectedCategory: string = ''; 
 
   submit() {
     if (this.form.valid) {
@@ -100,12 +100,17 @@ export class StockComponent implements OnInit {
 
   list() {
     this.productosService.stock(this.productId).subscribe(
-      (data: any[]) => {
-        this.filteredData = data || [];
-        this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
+      (res: any[]) => {
+        this.filteredData = res;
+        this.totalStockQuantity = res.reduce((sum, current) => sum + current.quantity, 0);
+
       },
-      (error) => {
-        this.toastr.error('Error al obtener el stock', 'Error', { timeOut: 5000 });
+      (err) => {
+        if (err.status !== 404) {
+          this.toastr.error('Error al obtener stock', 'Error', { timeOut: 5000 });
+        }
+        this.filteredData = [];
+        this.totalStockQuantity = 0;
       }
     );
   }
@@ -115,7 +120,6 @@ export class StockComponent implements OnInit {
     this.toastr.info('Volviendo a productos', 'Info', { timeOut: 3000 });
   }
   onFieldSelect() {
-    // Reinicia el valor del filtro al seleccionar un nuevo campo
     this.filterValue = '';
     this.selectedCategory = '';
   }
