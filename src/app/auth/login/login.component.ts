@@ -20,6 +20,11 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
+
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('storeId');
+
     this.authService.login(this.email, this.password).subscribe(
       (response) => {
         console.log('Login exitoso', response);
